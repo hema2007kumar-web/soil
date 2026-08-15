@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Soil Fertility Predictor</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        margin: 0;
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+    }
+    .card {
+        background: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        padding: 32px 40px;
+        max-width: 520px;
+        width: 100%;
+    }
+    h1 {
+        color: #2e7d32;
+        text-align: center;
+        margin-bottom: 4px;
+        font-size: 26px;
+    }
+    p.subtitle {
+        text-align: center;
+        color: #558b2f;
+        margin-top: 0;
+        margin-bottom: 24px;
+        font-size: 14px;
+    }
+    .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+    label {
+        font-size: 13px;
+        color: #33691e;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 4px;
+    }
+    input[type="number"] {
+        width: 100%;
+        padding: 8px 10px;
+        border: 1px solid #a5d6a7;
+        border-radius: 8px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+    input[type="number"]:focus {
+        outline: none;
+        border-color: #2e7d32;
+        box-shadow: 0 0 0 2px rgba(46,125,50,0.15);
+    }
+    button {
+        margin-top: 22px;
+        width: 100%;
+        background: #2e7d32;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    button:hover {
+        background: #1b5e20;
+    }
+    .result {
+        margin-top: 22px;
+        padding: 16px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 700;
+    }
+    .result.ok {
+        background: #dcedc8;
+        color: #33691e;
+    }
+    .result.err {
+        background: #ffcdd2;
+        color: #b71c1c;
+    }
+</style>
+</head>
+<body>
+    <div class="card">
+        <h1>🌱 Soil Fertility Predictor</h1>
+        <p class="subtitle">Enter your soil test values to estimate fertility level</p>
+
+        <form method="POST">
+            <div class="grid">
+                {% for col in feature_columns %}
+                <div>
+                    <label for="{{ col }}">{{ col }}</label>
+                    <input type="number" step="any" name="{{ col }}" id="{{ col }}" required>
+                </div>
+                {% endfor %}
+            </div>
+            <button type="submit">Predict Fertility</button>
+        </form>
+
+        {% if prediction %}
+            <div class="result {{ 'err' if prediction.startswith('Error') else 'ok' }}">
+                {% if not prediction.startswith('Error') %}
+                    Predicted: {{ prediction }}
+                {% else %}
+                    {{ prediction }}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
